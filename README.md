@@ -10,7 +10,7 @@ As a cornerstone for myself to build a Python chess AI (probably as an extra-cur
 
 Instead of relying on any mainstream chess libraries out there, **all chess pieces movement mechanisms are written in Python in their originality by myself**. This is an important element to demonstrate my own data structuring capabilities.
 
-## Types of analyses:
+## What ths analysis covers:
 - 1. 3x3 Boards 
   - Chess variants on a 3×3 board are not clearly defined, so it is not written in stone what pieces are involved or where they each start. These are largely solved games, however, so provide a good place to conduct simpler and quicker analyses.
   - This part will also likely involve some variants I created out of thin air because magic (alright, it's done on my laptop, but you get it).
@@ -21,6 +21,7 @@ Instead of relying on any mainstream chess libraries out there, **all chess piec
     - Mallett
     
 Because Gardner is a solved and is an unbalanced (potentially unfun) game, the inclusion of the other two is important in making this project valuable.
+For now, the Jacobs–Meirovitz variant is the main and ultimate goal of this analysis as I find it the most balanced and fun among the 3. It is also, unlike Gardner's, an unsolved game. Mallet is also unsolved though it is argued by some to be unbalanced, thanks to the Bishop/Knight exclusivity on both sides.
 
 ![Snapshot Image 1](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Gardner%20variant.PNG)
 ![Snapshot Image 2](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20JM%20variant.PNG)
