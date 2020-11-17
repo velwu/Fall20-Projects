@@ -21,3 +21,6 @@ Instead of relying on any mainstream chess libraries out there, **all chess piec
     - Mallett
     
 Because Gardner is a solved and is an unbalanced (potentially unfun) game, the inclusion of the other two is important in making this project valuable.
+
+![Snapshot Image 1](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Gardner%20variant.PNG)
+
