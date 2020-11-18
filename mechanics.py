@@ -97,13 +97,13 @@ def get_rook_moves(current_pos, chess_board):
 
                 elif piece_at_new_pos[0].isupper() != this_rook[0].isupper():
                     # If it's an enemy piece
-                    print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
                     solution_moves.append(new_pos)
                     break
 
                 elif piece_at_new_pos[0].isupper() == this_rook[0].isupper():
                     #If it's an ally piece:
-                    print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
                     break
             else:
                 break
@@ -135,13 +135,13 @@ def get_bishop_moves(current_pos, chess_board):
 
                 elif piece_at_new_pos[0].isupper() != this_bishop[0].isupper():
                     # If it's an enemy piece
-                    print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
                     solution_moves.append(new_pos)
                     break
 
                 elif piece_at_new_pos[0].isupper() == this_bishop[0].isupper():
                     # If it's an ally piece:
-                    print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
                     break
             else:
                 break
@@ -168,87 +168,90 @@ def get_knight_moves(current_pos, chess_board):
 
             elif piece_at_new_pos[0].isupper() != this_knight[0].isupper():
                 # If it's an enemy piece
-                print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                #print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
                 solution_moves.append(new_pos)
                 continue
 
             elif piece_at_new_pos[0].isupper() == this_knight[0].isupper():
                 # If it's an ally piece:
-                print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                #print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
                 continue
             else:
                 continue
     print("All possible moves with this Knight:", solution_moves)
     return solution_moves
 
-#TODO: Get Queen moves
+def get_queen_moves(current_pos, chess_board):
+    solution_moves = []
+    this_queen = get_piece_at_position(current_pos, chess_board)
+    # Look for potential moves in all 8 directions: Vertical, Horizontal and Diagonal ones
+    queen_directions = [[1, 0], [-1, 0], [0, 1], [0, -1],
+                        [1, 1], [1, -1], [-1, -1], [-1, 1]]
+    for each_direction in queen_directions:
+        # print("Trying direction:", each_direction)
+        queen_current = list(current_pos)
+        while True:
+            queen_current = np.add(queen_current, each_direction)
+            new_pos = tuple(queen_current)
+            if not on_chess_board(chess_board, new_pos):
+                break
+
+            elif on_chess_board(chess_board, new_pos):
+                piece_at_new_pos = get_piece_at_position(new_pos, chess_board)
+                if piece_at_new_pos[0] == ".":
+                    solution_moves.append(new_pos)
+
+                elif piece_at_new_pos[0].isupper() != this_queen[0].isupper():
+                    # If it's an enemy piece
+                    print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                    solution_moves.append(new_pos)
+                    break
+
+                elif piece_at_new_pos[0].isupper() == this_queen[0].isupper():
+                    # If it's an ally piece:
+                    print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    break
+            else:
+                break
+    print("All possible moves with this Queen:", solution_moves)
+    return solution_moves
+
 #TODO: Get King moves
+def get_king_moves(current_pos, chess_board):
+    solution_moves = []
+    this_king = get_piece_at_position(current_pos, chess_board)
+    # Look for potential moves in all 8 possible moves
+    king_directions = [[1, 0], [-1, 0], [0, 1], [0, -1],
+                        [1, 1], [1, -1], [-1, -1], [-1, 1]]
+    for each_direction in king_directions:
+        king_current = list(current_pos)
+        king_current = np.add(king_current, each_direction)
+        new_pos = tuple(king_current)
+        if not on_chess_board(chess_board, new_pos):
+            continue
+
+        elif on_chess_board(chess_board, new_pos):
+            piece_at_new_pos = get_piece_at_position(new_pos, chess_board)
+            if piece_at_new_pos[0] == ".":
+                solution_moves.append(new_pos)
+
+            elif piece_at_new_pos[0].isupper() != this_king[0].isupper():
+                # If it's an enemy piece
+                # print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                solution_moves.append(new_pos)
+                continue
+
+            elif piece_at_new_pos[0].isupper() == this_king[0].isupper():
+                # If it's an ally piece:
+                # print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                continue
+            else:
+                continue
+    print("All possible moves with this King:", solution_moves)
+    return solution_moves
+
 #TODO: Get Pawn moves
 #TODO: Play the whole game (no AI, but generate exhastive game tree)
 #TODO: Write the analysis
 #TODO: Start small. Try some 3*3 boards which are mostly solved (with any piece combinations, perhaps??)
-"""
-def getKnightMoves(pos, chess_board):
 
-    column, row = list(pos.strip().lower())
-    row = int(row) - 1
-    column = chess_map_from_alpha_to_index[column]
-    i,j = row, column
-    solution_moves = []
-    try:
-        temp = chess_board[i + 1][j - 2]
-        solution_moves.append([i + 1, j - 2])
-    except:
-        pass
-    try:
-        temp = chess_board[i + 2][j - 1]
-        solution_moves.append([i + 2, j - 1])
-    except:
-        pass
-    try:
-        temp = chess_board[i + 2][j + 1]
-        solution_moves.append([i + 2, j + 1])
-    except:
-        pass
-    try:
-        temp = chess_board[i + 1][j + 2]
-        solution_moves.append([i + 1, j + 2])
-    except:
-        pass
-    try:
-        temp = chess_board[i - 1][j + 2]
-        solution_moves.append([i - 1, j + 2])
-    except:
-        pass
-    try:
-        temp = chess_board[i - 2][j + 1]
-        solution_moves.append([i - 2, j + 1])
-    except:
-        pass
-    try:
-        temp = chess_board[i - 2][j - 1]
-        solution_moves.append([i - 2, j - 1])
-    except:
-        pass
-    try:
-        temp = chess_board[i - 1][j - 2]
-        solution_moves.append([i - 1, j - 2])
-    except:
-        pass
-
-    # Filter all negative values
-    temp = [i for i in solution_moves if i[0] >=0 and i[1] >=0]
-    allPossibleMoves = ["".join([chess_map_from_index_to_alpha[i[1]], str(i[0] + 1)]) for i in temp]
-    allPossibleMoves.sort()
-    return allPossibleMoves
-
-"""
-
-
-# TEST CODES below: Might delete later~
-
-#test_board_1 = create_chess_board("Gardner")
-#print_board.print_board(test_board_1, True)
-
-#test_board_2 = create_chess_board("Mallett")
-#print_board.print_board(test_board_2, True)

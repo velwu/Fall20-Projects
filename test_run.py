@@ -18,7 +18,7 @@ mechanics.add_piece_forcibly(chess_board, 'r', location)
 
 other_location = (2,0)
 mechanics.add_piece_forcibly(chess_board, 'Q', other_location)
-yet_other_location = (2,1)
+yet_other_location = (1,2)
 mechanics.add_piece_forcibly(chess_board, "P", yet_other_location)
 another_location_0 = (2,2)
 mechanics.add_piece_forcibly(chess_board, "n", another_location_0)
@@ -32,13 +32,21 @@ another_location_4 = (1,0)
 mechanics.add_piece_forcibly(chess_board, "P", another_location_4)
 another_location_5 = (0,4)
 mechanics.add_piece_forcibly(chess_board, "K", another_location_5)
+another_location_6 = (3,0)
+mechanics.add_piece_forcibly(chess_board, "P", another_location_6)
 
 
 # According to the type of piece adjust function
 print_board.print_board(chess_board, True)
 piece_to_test = mechanics.get_piece_at_position(another_location_0,chess_board)
 location_to_test = another_location_0
-if (piece_to_test[0] in ['B', 'b']):
+if (piece_to_test[0] in ['Q', 'q']):
+    possible_moves = mechanics.get_queen_moves(location_to_test, chess_board)
+
+elif (piece_to_test[0] in ['K', 'k']):
+    possible_moves = mechanics.get_king_moves(location_to_test, chess_board)
+
+elif (piece_to_test[0] in ['B', 'b']):
     possible_moves = mechanics.get_bishop_moves(location_to_test, chess_board)
 
 elif (piece_to_test[0] in ['N', 'n']):
