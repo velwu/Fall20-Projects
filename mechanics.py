@@ -6,7 +6,7 @@ import numpy as np
 
 map_letter_reps_to_piece_names = {
     'R': 'Black Rook', 'N': 'Black Knight', 'B': 'Black Bishop',
-    'Q': 'Black Queen', 'K': 'Black King', 'P': 'BLack Pawn',
+    'Q': 'Black Queen', 'K': 'Black King', 'P': 'Black Pawn',
     'r': 'White Rook', 'n': 'White Knight', 'b': 'White Bishop',
     'q': 'White Queen', 'k': 'White King', 'p': 'White Pawn',
     '.': 'nothing'
@@ -110,7 +110,6 @@ def get_rook_moves(current_pos, chess_board):
     print("All possible moves with this Rook:", solution_moves)
     return solution_moves
 
-#TODO: Get Bishop moves
 def get_bishop_moves(current_pos, chess_board):
     """ A function that returns the all possible moves of a Rook at a given position
         current_pos: The current position of the Rook, represented by a tuple
@@ -149,8 +148,40 @@ def get_bishop_moves(current_pos, chess_board):
     print("All possible moves with this Bishop:", solution_moves)
     return solution_moves
 
+def get_knight_moves(current_pos, chess_board):
+    solution_moves = []
+    this_knight = get_piece_at_position(current_pos, chess_board)
+    # Look for potential moves in all 8 possible moves
+    knight_directions = [[1, 2], [1, -2], [-1, -2], [-1, 2],
+                         [2, 1], [2, -1], [-2, -1], [-2, 1]]
+    for each_direction in knight_directions:
+        knight_current = list(current_pos)
+        knight_current = np.add(knight_current, each_direction)
+        new_pos = tuple(knight_current)
+        if not on_chess_board(chess_board, new_pos):
+            continue
+
+        elif on_chess_board(chess_board, new_pos):
+            piece_at_new_pos = get_piece_at_position(new_pos, chess_board)
+            if piece_at_new_pos[0] == ".":
+                solution_moves.append(new_pos)
+
+            elif piece_at_new_pos[0].isupper() != this_knight[0].isupper():
+                # If it's an enemy piece
+                print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                solution_moves.append(new_pos)
+                continue
+
+            elif piece_at_new_pos[0].isupper() == this_knight[0].isupper():
+                # If it's an ally piece:
+                print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                continue
+            else:
+                continue
+    print("All possible moves with this Knight:", solution_moves)
+    return solution_moves
+
 #TODO: Get Queen moves
-#TODO: Get Knight moves
 #TODO: Get King moves
 #TODO: Get Pawn moves
 #TODO: Play the whole game (no AI, but generate exhastive game tree)

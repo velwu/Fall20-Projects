@@ -26,14 +26,23 @@ another_location_1 = (4,0)
 mechanics.add_piece_forcibly(chess_board, "k", another_location_1)
 another_location_2 = (3,3)
 mechanics.add_piece_forcibly(chess_board, 'B', another_location_2)
+another_location_3 = (4,1)
+mechanics.add_piece_forcibly(chess_board, "q", another_location_3)
+another_location_4 = (1,0)
+mechanics.add_piece_forcibly(chess_board, "P", another_location_4)
+another_location_5 = (0,4)
+mechanics.add_piece_forcibly(chess_board, "K", another_location_5)
 
 
 # According to the type of piece adjust function
 print_board.print_board(chess_board, True)
-piece_to_test = mechanics.get_piece_at_position(another_location_2,chess_board)
-location_to_test = another_location_2
+piece_to_test = mechanics.get_piece_at_position(another_location_0,chess_board)
+location_to_test = another_location_0
 if (piece_to_test[0] in ['B', 'b']):
     possible_moves = mechanics.get_bishop_moves(location_to_test, chess_board)
+
+elif (piece_to_test[0] in ['N', 'n']):
+    possible_moves = mechanics.get_knight_moves(location_to_test, chess_board)
 
 elif (piece_to_test[0] in ['R', 'r']):
     possible_moves = mechanics.get_rook_moves(location_to_test, chess_board)
