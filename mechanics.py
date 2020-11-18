@@ -120,8 +120,34 @@ def get_bishop_moves(current_pos, chess_board):
     this_bishop = get_piece_at_position(current_pos, chess_board)
     # Look for potential moves in all 4 diagonal directions
     bishop_directions = [[1, 1], [1, -1], [-1, -1], [-1, 1]]
-    # for each in bishop_directions:
+    for each_direction in bishop_directions:
+        # print("Trying direction:", each_direction)
+        bishop_current = list(current_pos)
+        while True:
+            bishop_current = np.add(bishop_current, each_direction)
+            new_pos = tuple(bishop_current)
+            if not on_chess_board(chess_board, new_pos):
+                break
 
+            elif on_chess_board(chess_board, new_pos):
+                piece_at_new_pos = get_piece_at_position(new_pos, chess_board)
+                if piece_at_new_pos[0] == ".":
+                    solution_moves.append(new_pos)
+
+                elif piece_at_new_pos[0].isupper() != this_bishop[0].isupper():
+                    # If it's an enemy piece
+                    print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                    solution_moves.append(new_pos)
+                    break
+
+                elif piece_at_new_pos[0].isupper() == this_bishop[0].isupper():
+                    # If it's an ally piece:
+                    print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    break
+            else:
+                break
+    print("All possible moves with this Bishop:", solution_moves)
+    return solution_moves
 
 #TODO: Get Queen moves
 #TODO: Get Knight moves
