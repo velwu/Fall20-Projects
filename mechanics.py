@@ -103,7 +103,7 @@ def get_rook_moves(current_pos, chess_board):
 
                 elif piece_at_new_pos[0].isupper() == this_rook[0].isupper():
                     #If it's an ally piece:
-                    #print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecting an ally", piece_at_new_pos[1], "at", new_pos)
                     break
             else:
                 break
@@ -141,7 +141,7 @@ def get_bishop_moves(current_pos, chess_board):
 
                 elif piece_at_new_pos[0].isupper() == this_bishop[0].isupper():
                     # If it's an ally piece:
-                    #print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecting an ally", piece_at_new_pos[1], "at", new_pos)
                     break
             else:
                 break
@@ -174,7 +174,7 @@ def get_knight_moves(current_pos, chess_board):
 
             elif piece_at_new_pos[0].isupper() == this_knight[0].isupper():
                 # If it's an ally piece:
-                #print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                #print("Detecting an ally", piece_at_new_pos[1], "at", new_pos)
                 continue
             else:
                 continue
@@ -203,20 +203,19 @@ def get_queen_moves(current_pos, chess_board):
 
                 elif piece_at_new_pos[0].isupper() != this_queen[0].isupper():
                     # If it's an enemy piece
-                    print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecting an enemy", piece_at_new_pos[1], "at", new_pos)
                     solution_moves.append(new_pos)
                     break
 
                 elif piece_at_new_pos[0].isupper() == this_queen[0].isupper():
                     # If it's an ally piece:
-                    print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                    #print("Detecting an ally", piece_at_new_pos[1], "at", new_pos)
                     break
             else:
                 break
     print("All possible moves with this Queen:", solution_moves)
     return solution_moves
 
-#TODO: Get King moves
 def get_king_moves(current_pos, chess_board):
     solution_moves = []
     this_king = get_piece_at_position(current_pos, chess_board)
@@ -243,7 +242,7 @@ def get_king_moves(current_pos, chess_board):
 
             elif piece_at_new_pos[0].isupper() == this_king[0].isupper():
                 # If it's an ally piece:
-                # print("Detecing an ally", piece_at_new_pos[1], "at", new_pos)
+                # print("Detecting an ally", piece_at_new_pos[1], "at", new_pos)
                 continue
             else:
                 continue
@@ -251,6 +250,40 @@ def get_king_moves(current_pos, chess_board):
     return solution_moves
 
 #TODO: Get Pawn moves
+def get_pawn_moves(current_pos, chess_board):
+    solution_moves = []
+    this_pawn = get_piece_at_position(current_pos, chess_board)
+    # The first moves in these lists are regular moves, whereas the other two are attacking moves
+    pawn_directions_top_player = [[1,0], [1, 1], [1, -1]]
+    pawn_directions_bot_player = [[-1,0], [-1, 1], [-1, -1]]
+
+    if this_pawn[0].isupper() == True:
+        pawn_directions = pawn_directions_top_player
+    else:
+        pawn_directions = pawn_directions_bot_player
+
+    # Check the regular move first
+    pawn_current = list(current_pos)
+    pawn_current = np.add(pawn_current, pawn_directions[0])
+    new_pos = tuple(pawn_current)
+    # Regular move only works if it is within board boundaries and detects an empty square
+    if on_chess_board(chess_board, new_pos) and get_piece_at_position(new_pos, chess_board)[0] == ".":
+        solution_moves.append(new_pos)
+
+    # Then check the 2 attack moves
+
+    for each_attack_move in pawn_directions[1:]:
+        pawn_current = list(current_pos)
+        pawn_current = np.add(pawn_current, each_attack_move)
+        new_pos = tuple(pawn_current)
+        if not on_chess_board(chess_board, new_pos):
+            continue
+        piece_at_new_pos = get_piece_at_position(new_pos, chess_board)
+        if piece_at_new_pos[0].isupper() != this_pawn[0].isupper() and piece_at_new_pos[0] != ".":
+            # Only add to this Pawn's moves if it's an enemy piece
+            solution_moves.append(new_pos)
+    print("All possible moves with this Pawn:", solution_moves)
+    return solution_moves
 #TODO: Play the whole game (no AI, but generate exhastive game tree)
 #TODO: Write the analysis
 #TODO: Start small. Try some 3*3 boards which are mostly solved (with any piece combinations, perhaps??)

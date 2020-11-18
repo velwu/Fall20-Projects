@@ -38,8 +38,9 @@ mechanics.add_piece_forcibly(chess_board, "P", another_location_6)
 
 # According to the type of piece adjust function
 print_board.print_board(chess_board, True)
-piece_to_test = mechanics.get_piece_at_position(another_location_0,chess_board)
-location_to_test = another_location_0
+test_coord = (3,0)
+piece_to_test = mechanics.get_piece_at_position(test_coord,chess_board)
+location_to_test = test_coord
 if (piece_to_test[0] in ['Q', 'q']):
     possible_moves = mechanics.get_queen_moves(location_to_test, chess_board)
 
@@ -54,6 +55,11 @@ elif (piece_to_test[0] in ['N', 'n']):
 
 elif (piece_to_test[0] in ['R', 'r']):
     possible_moves = mechanics.get_rook_moves(location_to_test, chess_board)
+
+elif (piece_to_test[0] in ['P', 'p']):
+    possible_moves = mechanics.get_pawn_moves(location_to_test, chess_board)
+else:
+    print("There is no piece in that square.")
 
 print(json.dumps({"piece":piece_to_test,
                   str(len(possible_moves)) + " possible moves from current_location": location_to_test}))
