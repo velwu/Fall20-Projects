@@ -21,7 +21,10 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
 - 2. 3x4 Boards 
   - Some of the variants are solved while the others are not.
  
-- 3. 5x5 Boards
+- 3. 4x4 Boards
+  - Silverman 4x5
+ 
+- 4. 5x5 Boards
   - The only variant that is solved in this family is the Gardner minichess (with White player having an obvious advantage). This project will attempt to prove it mathematically and demonstrate it programmatically, while also analyzing the following variants:
     - Jacobs–Meirovitz
     - Mallett
