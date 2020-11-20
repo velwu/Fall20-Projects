@@ -31,7 +31,7 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
     - Mallett
     
 Because Gardner is a solved and is an unbalanced (potentially unfun) game, the inclusion of the other two is important in making this project valuable.
-For now, the Jacobs–Meirovitz variant is the main and ultimate goal of this analysis as I find it the most balanced and fun among the 3. It is also, unlike Gardner's, an unsolved game. Mallet is also unsolved though it is argued by some to be unbalanced, thanks to the Bishop/Knight exclusivity on both sides.
+For now, 3x4 customized boards and Silverman 4x5 (as screenshot below describes) are the main targets of analysis, while the Jacobs–Meirovitz variant is the ultimate goal of this analysis as I find it the most balanced and fun among the 3. It is also, unlike Gardner's, an unsolved game. Mallet is also unsolved though it is argued by some to be unbalanced, thanks to the Bishop/Knight exclusivity on both sides.
 
 ![Snapshot Image 0](https://github.com/velwu/Fall20-Projects/blob/main/Silverman%204x5.PNG)
 ![Snapshot Image 1](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Gardner%20variant.PNG)
