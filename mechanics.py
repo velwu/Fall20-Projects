@@ -341,9 +341,32 @@ def generate_game_tree(chess_board, current_player):
 
     return all_new_boards
 
+def check_for_winner(chess_board, white_essential_piece, black_essential_piece):
+    # Usually white_essential_piece == "White King (k)" and black_essential_piece == "Black King (K)"
+    # But in my mind, I have some ideas for custom games where Queen or Bishop substitutes King as essential
+    # So i just left the essential pieces as parameters in case I need them
+    if not any(white_essential_piece in sublist for sublist in chess_board):
+        print("Black has won.")
+        return "Black"
+    elif not any(black_essential_piece in sublist for sublist in chess_board):
+        print("White has won.")
+        return "White"
+    else:
+        print("The game goes on")
+        return None
 
+def detect_check(chess_board, white_essential_piece, black_essential_piece):
+
+    return
+
+#TODO: Write a func which detects checks for whether either sides' essential (King in default settings)
+# is under attack and cut out the tree branch if a move cannot remove that threat
 
 #TODO: Play the whole game (no AI, but generate exhaustive game tree)
-#TODO: Write the analysis
+
+#TODO: Downsize the analysis to probably 3x4, with only some select pieces
 #TODO: Start small. Try some 3*3 boards which are mostly solved (with any piece combinations, perhaps??)
+
+#TODO: Write the analysis
+
 
