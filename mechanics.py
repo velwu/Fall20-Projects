@@ -3,6 +3,7 @@ import json
 import chess
 import print_board
 import numpy as np
+import copy
 
 map_letter_reps_to_piece_names = {
     'R': 'Black Rook', 'N': 'Black Knight', 'B': 'Black Bishop',
@@ -107,7 +108,7 @@ def get_rook_moves(current_pos, chess_board):
                     break
             else:
                 break
-    print("All possible moves with this Rook:", solution_moves)
+    #print("All possible moves with this Rook:", solution_moves)
     return solution_moves
 
 def get_bishop_moves(current_pos, chess_board):
@@ -145,7 +146,7 @@ def get_bishop_moves(current_pos, chess_board):
                     break
             else:
                 break
-    print("All possible moves with this Bishop:", solution_moves)
+    #print("All possible moves with this Bishop:", solution_moves)
     return solution_moves
 
 def get_knight_moves(current_pos, chess_board):
@@ -178,7 +179,7 @@ def get_knight_moves(current_pos, chess_board):
                 continue
             else:
                 continue
-    print("All possible moves with this Knight:", solution_moves)
+    #print("All possible moves with this Knight:", solution_moves)
     return solution_moves
 
 def get_queen_moves(current_pos, chess_board):
@@ -213,7 +214,7 @@ def get_queen_moves(current_pos, chess_board):
                     break
             else:
                 break
-    print("All possible moves with this Queen:", solution_moves)
+    #print("All possible moves with this Queen:", solution_moves)
     return solution_moves
 
 def get_king_moves(current_pos, chess_board):
@@ -246,7 +247,7 @@ def get_king_moves(current_pos, chess_board):
                 continue
             else:
                 continue
-    print("All possible moves with this King:", solution_moves)
+    #print("All possible moves with this King:", solution_moves)
     return solution_moves
 
 #TODO: Get Pawn moves
@@ -282,9 +283,67 @@ def get_pawn_moves(current_pos, chess_board):
         if piece_at_new_pos[0].isupper() != this_pawn[0].isupper() and piece_at_new_pos[0] != ".":
             # Only add to this Pawn's moves if it's an enemy piece
             solution_moves.append(new_pos)
-    print("All possible moves with this Pawn:", solution_moves)
+    #print("All possible moves with this Pawn:", solution_moves)
     return solution_moves
-#TODO: Play the whole game (no AI, but generate exhastive game tree)
+
+def generate_game_tree(chess_board, current_player):
+    #TODO: This function currently only works for 1 round.
+    # Expand it so it can walk through the whole game
+
+    all_new_boards = list()
+
+    if current_player == "White":
+        queen_to_move = 'q'
+        king_to_move = 'k'
+        bishop_to_move = 'b'
+        knight_to_move = 'n'
+        rook_to_move = 'r'
+        pawn_to_move = 'p'
+    elif current_player == "Black":
+        queen_to_move = 'Q'
+        king_to_move = 'K'
+        bishop_to_move = 'B'
+        knight_to_move = 'N'
+        rook_to_move = 'R'
+        pawn_to_move = 'P'
+    else:
+        print("Current player format ERROR. Check input!!")
+        return None
+
+    for each_row_idx, each_row_val in enumerate(chess_board):
+        for each_square_idx, each_square_val in enumerate(each_row_val):
+            location_to_test = (each_row_idx, each_square_idx)
+            if (each_square_val == queen_to_move):
+                possible_moves = get_queen_moves(location_to_test, chess_board)
+
+            elif (each_square_val == king_to_move):
+                possible_moves = get_king_moves(location_to_test, chess_board)
+
+            elif (each_square_val == bishop_to_move):
+                possible_moves = get_bishop_moves(location_to_test, chess_board)
+
+            elif (each_square_val == knight_to_move):
+                possible_moves = get_knight_moves(location_to_test, chess_board)
+
+            elif (each_square_val == rook_to_move):
+                possible_moves = get_rook_moves(location_to_test, chess_board)
+
+            elif (each_square_val == pawn_to_move):
+                possible_moves = get_pawn_moves(location_to_test, chess_board)
+            else:
+                #print("There is no movable piece in that square:", location_to_test)
+                continue
+
+            for each_possible_move in possible_moves:
+                new_chess_board = copy.deepcopy(chess_board)
+                all_new_boards.append(move_piece_by_set_pos(location_to_test, each_possible_move,
+                                      new_chess_board, each_square_val))
+
+    return all_new_boards
+
+
+
+#TODO: Play the whole game (no AI, but generate exhaustive game tree)
 #TODO: Write the analysis
 #TODO: Start small. Try some 3*3 boards which are mostly solved (with any piece combinations, perhaps??)
 

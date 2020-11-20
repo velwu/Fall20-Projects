@@ -15,7 +15,8 @@ def print_board(board_class, is_list_bool):
         board_obj = []
         for each_row in board_class:
             single_row_list = (pd.Series(each_row)).map(uni_pieces)
-            board_obj.append(list(single_row_list))
+            single_row_str = ''.join(list(single_row_list))
+            board_obj.append(single_row_str)
             # board_obj.insert(0, list(single_row_list))
         print(*board_obj, sep="\n")
 
