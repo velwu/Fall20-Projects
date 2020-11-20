@@ -23,6 +23,7 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
  
 - 3. 4x4 Boards
   - Silverman 4x5
+    - While Silverman 4x4 is known to be solved in huge favor of White player, 4x5 is a alternative proposed by Silverman that is largely playable and unsolved.
  
 - 4. 5x5 Boards
   - The only variant that is solved in this family is the Gardner minichess (with White player having an obvious advantage). This project will attempt to prove it mathematically and demonstrate it programmatically, while also analyzing the following variants:
@@ -32,7 +33,9 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
 Because Gardner is a solved and is an unbalanced (potentially unfun) game, the inclusion of the other two is important in making this project valuable.
 For now, the Jacobs–Meirovitz variant is the main and ultimate goal of this analysis as I find it the most balanced and fun among the 3. It is also, unlike Gardner's, an unsolved game. Mallet is also unsolved though it is argued by some to be unbalanced, thanks to the Bishop/Knight exclusivity on both sides.
 
+![Snapshot Image 0](https://github.com/velwu/Fall20-Projects/blob/main/Silverman%204x5.PNG)
 ![Snapshot Image 1](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Gardner%20variant.PNG)
 ![Snapshot Image 2](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20JM%20variant.PNG)
 ![Snapshot Image 3](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Mallett%20variant.PNG)
+
 
