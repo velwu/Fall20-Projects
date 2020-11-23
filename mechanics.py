@@ -76,6 +76,23 @@ def create_chess_board(variant_name):
         chess_board[-2] = [".", ".", "P"]
         chess_board[-1] = ["R", "B", "N"]
 
+    elif variant_name == "QueensMen 3x5":
+        chess_board = [[".", ".", "."] for i in range(5)]
+        chess_board[0] = ['n', 'q', 'n']
+        chess_board[1] = ['.', "k", "."]
+        chess_board[-2] = [".", "K", "."]
+        chess_board[-1] = ["N", "Q", "N"]
+
+
+    elif variant_name == "Silverman 4x5":
+        chess_board = [
+            ["r", "q", "k", "r"],
+            ["p", "p", "p", "p"],
+            [".", ".", ".", "."],
+            ["P", "P", "P", "P"],
+            ["R", "Q", "K", "R"]
+        ]
+
     # print("Board type:", variant_name, "\n", *chess_board, sep="\n")
     print("Board type:", variant_name)
 
@@ -365,8 +382,141 @@ def check_for_winner(chess_board, white_essential_piece, black_essential_piece):
         print("The game goes on")
         return None
 
-#TODO: Play the whole game (no AI, but generate exhaustive game tree) with elimination rules
-def play_a_game_of_elimination(variant_name):
+def minimax_evaluation(chess_board, player_color, who_is_essential):
+    evaluation_score = 0
+    x = True
+    # White player is represented by "A"
+    # Black player is represented by "a"
+    if player_color == "White":
+        color_char = "A"
+    elif player_color == "Black":
+        color_char = "a"
+
+    for each_row_idx, each_row_val in enumerate(chess_board):
+        for each_square_idx, each_square_val in enumerate(each_row_val):
+            if each_square_val.isupper() == color_char.isupper():
+                # If the piece is on the player's side, add the eval score as positive
+                evaluation_score += obtain_piece_value(each_square_val, who_is_essential)
+                # Otherwise, it is an enemy piece, so add the eval score negatively
+            else:
+                evaluation_score -= obtain_piece_value(each_square_val, who_is_essential)
+    return evaluation_score
+
+def obtain_piece_value(single_piece, who_is_essential):
+    if single_piece == ".":
+        return 0
+    # Royals (Queen and King) can be prime targets in standard or custom games
+    # So their values differ
+    if (single_piece in ['Q', 'q']):
+        if who_is_essential == "Queen":
+            return 999
+        else:
+            return 150
+    elif (single_piece in ['K', 'k']):
+        if who_is_essential == "King":
+            return 999
+        else:
+            return 90
+    elif (single_piece in ['B', 'b']):
+        return 30
+    elif (single_piece in ['N', 'n']):
+        return 30
+    elif (single_piece in ['R', 'r']):
+        return 50
+    elif (single_piece in ['P', 'p']):
+        return 10
+
+def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximizing):
+    possible_boards = generate_game_tree(chess_board, current_player)
+    best_board = -9999
+    second_best = -9999
+    third_best = -9999
+    best_board_final = None
+
+    for each_board in possible_boards:
+        value = max(best_board, minimax_execution(depth - 1, each_board, current_player, who_is_essential, not is_maximizing))
+        # print("Maximizing Value:", value)
+    if value > best_board:
+        third_best = second_best
+        second_best = best_board
+        best_board = value
+        best_board_final = each_board
+    return best_board_final
+
+
+def minimax_execution(depth, chess_board, current_player, who_is_essential, is_maximizing):
+
+    if depth == 0:
+        return -minimax_evaluation(chess_board, current_player, who_is_essential)
+    possible_boards = generate_game_tree(chess_board, current_player)
+
+    # print("Depth: ", (4 - depth + 1), " ", len(list(possible_boards)), " Possible boards")
+
+    if is_maximizing:
+        best_board = -9999
+        for each_board in possible_boards:
+            best_board = max(best_board, minimax_execution(depth - 1, each_board, current_player, who_is_essential, not is_maximizing))
+        return best_board
+    else:
+        best_board = 9999
+        for each_board in possible_boards:
+            best_board = min(best_board, minimax_execution(depth - 1, each_board, current_player, who_is_essential, not is_maximizing))
+
+        return best_board
+
+def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, when_to_call_draw:int):
+    """
+    variant_name: The name of chessboard variant desired.
+    who_is_essential: If this string specifies a piece (ex: "Queen", or "King"), whoever strikes down that piece first wins;
+    otherwise, this is a game of elimination, in which whoever wipes all enemy pieces win.
+    how_deep: An integer which decides how deep AIs should look ahead when playing the game using Minimax algorithms
+    when_to_call_draw: An integer which specify the maximum number of turns. When the game progresses to this number, call it a draw and end the game
+
+    """
+
+    chess_board = create_chess_board(variant_name)
+    turn_number = 0
+    print("The game begins.")
+    print_board.print_board(chess_board, True)
+
+
+    # If the game progress to the 1000th turn without either side winning
+    # Then call it a draw
+
+    while turn_number < when_to_call_draw:
+        # If the turn number is even ((%2 == 0), it is White's turn
+        # If it is an odd number (%2 == 1), it is Black's turn
+        if turn_number%2 == 0:
+            print("Turn No.", turn_number, "; It is White's turn.")
+            board_after_white_plays = minimax_root(how_deep, chess_board, "White", who_is_essential, True)
+            chess_board_status_str = ''.join(map(str, board_after_white_plays))
+            if chess_board_status_str.isupper():
+                print("All Black pieces eliminated. The White Player has won.")
+                final_board = board_after_white_plays
+                print("The game is over.")
+                print_board.print_board(final_board, True)
+                break
+            chess_board = board_after_white_plays
+
+        elif turn_number%2 == 1:
+            print("Turn No.", turn_number, "; It is Black's turn.")
+            board_after_black_plays = minimax_root(how_deep, chess_board, "Black", who_is_essential, True)
+            chess_board_status_str = ''.join(map(str, board_after_black_plays))
+            if chess_board_status_str.islower():
+                print("All White pieces eliminated. The Black Player has won.")
+                final_board = board_after_black_plays
+                print("The game is over.")
+                print_board.print_board(final_board, True)
+                break
+            chess_board = board_after_black_plays
+
+        print_board.print_board(chess_board, True)
+        turn_number += 1
+        continue
+    print("The game ended in a draw.")
+    print_board.print_board(chess_board, True)
+
+def play_a_game_of_elimination_dumbly(variant_name):
     initial_chess_board = create_chess_board(variant_name)
     # chess_board_status_str = ''.join(map(str,chess_board))
 
