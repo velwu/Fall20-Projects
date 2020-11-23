@@ -4,12 +4,14 @@ import chess
 import print_board
 import numpy as np
 import copy
+import random
+import time
 
 map_letter_reps_to_piece_names = {
-    'R': 'Black Rook', 'N': 'Black Knight', 'B': 'Black Bishop',
-    'Q': 'Black Queen', 'K': 'Black King', 'P': 'Black Pawn',
-    'r': 'White Rook', 'n': 'White Knight', 'b': 'White Bishop',
-    'q': 'White Queen', 'k': 'White King', 'p': 'White Pawn',
+    'R': 'White Rook', 'N': 'White Knight', 'B': 'White Bishop',
+    'Q': 'White Queen', 'K': 'White King', 'P': 'White Pawn',
+    'r': 'Black Rook', 'n': 'Black Knight', 'b': 'Black Bishop',
+    'q': 'Black Queen', 'k': 'Black King', 'p': 'Black Pawn',
     '.': 'nothing'
 }
 
@@ -50,22 +52,29 @@ def create_chess_board(variant_name):
     chess_board = [[".", ".", ".", ".", "."] for i in range(5)]
 
     if variant_name == "Gardner":
-        chess_board[0] = ['R', 'N', 'B', 'Q', 'K']
-        chess_board[1] = ['P' for p in range(5)]
-        chess_board[-2] = ['p' for p in range(5)]
-        chess_board[-1] = ['r', 'n', 'b', 'q', 'k']
+        chess_board[0] = ['r', 'n', 'b', 'q', 'k']
+        chess_board[1] = ['p' for p in range(5)]
+        chess_board[-2] = ['P' for p in range(5)]
+        chess_board[-1] = ['R', 'N', 'B', 'Q', 'K']
 
-    if variant_name == "Jacobs–Meirovitz":
-        chess_board[0] = ['B', 'N', 'R', 'Q', 'K']
-        chess_board[1] = ['P' for p in range(5)]
-        chess_board[-2] = ['p' for p in range(5)]
-        chess_board[-1] = ['k', 'q', 'r', 'n', 'b']
+    elif variant_name == "Jacobs–Meirovitz":
+        chess_board[0] = ['b', 'n', 'r', 'q', 'k']
+        chess_board[1] = ['p' for p in range(5)]
+        chess_board[-2] = ['P' for p in range(5)]
+        chess_board[-1] = ['K', 'Q', 'R', 'N', 'B']
 
     elif variant_name == "Mallett":
-        chess_board[0] = ['R', 'B', 'Q', 'K', 'B']
-        chess_board[1] = ['P' for p in range(5)]
-        chess_board[-2] = ['p' for p in range(5)]
-        chess_board[-1] = ['r', 'n', 'q', 'k', 'n']
+        chess_board[0] = ['r', 'b', 'q', 'k', 'b']
+        chess_board[1] = ['p' for p in range(5)]
+        chess_board[-2] = ['P' for p in range(5)]
+        chess_board[-1] = ['R', 'N', 'Q', 'K', 'N']
+
+    elif variant_name == "THOC":
+        chess_board = [[".", ".", "."] for i in range(4)]
+        chess_board[0] = ['n', 'b', 'r']
+        chess_board[1] = ['p', ".", "."]
+        chess_board[-2] = [".", ".", "P"]
+        chess_board[-1] = ["R", "B", "N"]
 
     # print("Board type:", variant_name, "\n", *chess_board, sep="\n")
     print("Board type:", variant_name)
@@ -250,7 +259,6 @@ def get_king_moves(current_pos, chess_board):
     #print("All possible moves with this King:", solution_moves)
     return solution_moves
 
-#TODO: Get Pawn moves
 def get_pawn_moves(current_pos, chess_board):
     solution_moves = []
     this_pawn = get_piece_at_position(current_pos, chess_board)
@@ -259,9 +267,11 @@ def get_pawn_moves(current_pos, chess_board):
     pawn_directions_bot_player = [[-1,0], [-1, 1], [-1, -1]]
 
     if this_pawn[0].isupper() == True:
-        pawn_directions = pawn_directions_top_player
-    else:
+        # If the char is capitalized, then it represents a White pieces
         pawn_directions = pawn_directions_bot_player
+    else:
+        # Else, a de-capitalized char represents a Black piece
+        pawn_directions = pawn_directions_top_player
 
     # Check the regular move first
     pawn_current = list(current_pos)
@@ -293,19 +303,19 @@ def generate_game_tree(chess_board, current_player):
     all_new_boards = list()
 
     if current_player == "White":
-        queen_to_move = 'q'
-        king_to_move = 'k'
-        bishop_to_move = 'b'
-        knight_to_move = 'n'
-        rook_to_move = 'r'
-        pawn_to_move = 'p'
-    elif current_player == "Black":
         queen_to_move = 'Q'
         king_to_move = 'K'
         bishop_to_move = 'B'
         knight_to_move = 'N'
         rook_to_move = 'R'
         pawn_to_move = 'P'
+    elif current_player == "Black":
+        queen_to_move = 'q'
+        king_to_move = 'k'
+        bishop_to_move = 'b'
+        knight_to_move = 'n'
+        rook_to_move = 'r'
+        pawn_to_move = 'p'
     else:
         print("Current player format ERROR. Check input!!")
         return None
@@ -355,14 +365,53 @@ def check_for_winner(chess_board, white_essential_piece, black_essential_piece):
         print("The game goes on")
         return None
 
+#TODO: Play the whole game (no AI, but generate exhaustive game tree) with elimination rules
+def play_a_game_of_elimination(variant_name):
+    initial_chess_board = create_chess_board(variant_name)
+    # chess_board_status_str = ''.join(map(str,chess_board))
+
+    print("The game begins.")
+    print_board.print_board(initial_chess_board, True)
+
+    while True:
+        print("It is now White's turn")
+        time.sleep(2)
+        list_of_next_boards = generate_game_tree(initial_chess_board, "White")
+        board_after_white_plays = random.choice(list_of_next_boards)
+        chess_board_status_str = ''.join(map(str, board_after_white_plays))
+        if chess_board_status_str.isupper():
+            print("All Black pieces eliminated. The White Player has won.")
+            final_board = board_after_white_plays
+            break
+        print_board.print_board(board_after_white_plays, True)
+        print("It is now Black's turn")
+        time.sleep(2)
+        list_of_next_boards = generate_game_tree(board_after_white_plays, "Black")
+        board_after_black_plays = random.choice(list_of_next_boards)
+        chess_board_status_str = ''.join(map(str, board_after_black_plays))
+        if chess_board_status_str.islower():
+            print("All White pieces eliminated. The Black Player has won.")
+            final_board = board_after_black_plays
+            break
+        print_board.print_board(board_after_black_plays, True)
+        initial_chess_board = board_after_black_plays
+        continue
+
+    print("The game is over.")
+    print_board.print_board(final_board, True)
+    return final_board
+
+#TODO: Write a func which detects checks for whether either sides' essential (King in default settings)
+# is under attack and cut out the tree branch if a move cannot remove that threat
 def detect_check(chess_board, white_essential_piece, black_essential_piece):
 
     return
 
-#TODO: Write a func which detects checks for whether either sides' essential (King in default settings)
-# is under attack and cut out the tree branch if a move cannot remove that threat
+#TODO: What about stalemate(s) though???
+def detect_stalemate(chess_board):
+    return
 
-#TODO: Play the whole game (no AI, but generate exhaustive game tree)
+#TODO: Play the whole game (no AI, but generate exhaustive game tree) with standard King-slaying rules
 
 #TODO: Downsize the analysis to probably 3x4, with only some select pieces
 #TODO: Start small. Try some 3*3 boards which are mostly solved (with any piece combinations, perhaps??)

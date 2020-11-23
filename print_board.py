@@ -8,8 +8,8 @@ import chess.svg
 import mechanics
 
 def print_board(board_class, is_list_bool):
-    uni_pieces = {'r':' ♜ ', 'n':' ♞ ', 'b':' ♝ ', 'q':' ♛ ', 'k':' ♚ ', 'p':' ♟ ',
-                  'R':' ♖ ', 'N':' ♘ ', 'B':' ♗ ', 'Q':' ♕ ', 'K':' ♔ ', 'P':' ♙ ', '.':' 口 '}
+    uni_pieces = {'R':' ♜ ', 'N':' ♞ ', 'B':' ♝ ', 'Q':' ♛ ', 'K':' ♚ ', 'P':' ♟ ',
+                  'r':' ♖ ', 'n':' ♘ ', 'b':' ♗ ', 'q':' ♕ ', 'k':' ♔ ', 'p':' ♙ ', '.':' 口 '}
 
     #print(board_test)
     if is_list_bool:
@@ -37,6 +37,6 @@ def print_game_tree(test_chess_board, which_player):
     for each_idx, each_opening in enumerate(some_opening_boards_turn1):
         print("Possible board No.", str(each_idx+1))
         print_board(each_opening, True)
-        mechanics.check_for_winner(each_opening, 'k', 'K')
+        mechanics.check_for_winner(each_opening, 'K', 'k')
         print("\n")
     return some_opening_boards_turn1
