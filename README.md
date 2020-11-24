@@ -1,4 +1,4 @@
-# Fantastic Chess Variants and Whether They're Solved 
+# Fantastic Chess Variants and How to Play Them
 A student final project for the Fall 2020 semester of Data Structure & Algorithm at iSchool, UIUC
 
 (yes, the title is a reference to [this other fantastic thing](https://harrypotter.fandom.com/wiki/Fantastic_Beasts_and_Where_to_Find_Them_(film)), in case you've noticed. I am a proud Rowling fanboy~)
@@ -6,7 +6,7 @@ A student final project for the Fall 2020 semester of Data Structure & Algorithm
 
 ## What is this project and why is it important??
 
-As a cornerstone for myself to build a Python chess AI (probably as an extra-curricular personal project) sometime in the future, this project involves analyses of many existing games in the [Minichess family](https://en.wikipedia.org/wiki/Minichess)
+As a cornerstone for myself to build a Python chess AI (probably as an extra-curricular personal project) sometime in the future, this project involves analyses of many existing games in the [Minichess family](https://en.wikipedia.org/wiki/Minichess), including writing my own Minimax AI to play them.
 
 Instead of relying on any mainstream chess libraries out there, **all chess pieces movement mechanisms are written in Python in their originality by myself**. This is an important element to demonstrate my own data structuring capabilities.
 
