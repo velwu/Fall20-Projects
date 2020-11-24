@@ -439,11 +439,16 @@ def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximi
             next_player = "White"
         value = max(best_board, minimax_execution(depth - 1, each_board, next_player, who_is_essential, not is_maximizing))
         # print("Maximizing Value:", value)
-    if value > best_board:
-        third_best = second_best
-        second_best = best_board
-        best_board = value
-        best_board_final = each_board
+        if value > best_board:
+            third_best = second_best
+            second_best = best_board
+            best_board = value
+            if best_board_final != None:
+                second_best_board_final = copy.deepcopy(best_board_final)
+            best_board_final = each_board
+    #TODO: Connect this with the seen move cache/dict so that AIs use the 2nd best move
+    # when the best move is already seen 3 times
+
     return best_board_final
 
 
@@ -486,6 +491,12 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
     when_to_call_draw: An integer which specify the maximum number of turns. When the game progresses to this number, call it a draw and end the game
 
     """
+
+    #TODO: Have a dict space here which serves as a cache of the last 10 or so game states
+    # probably stored in the form of chess_board_status_str
+    # {"...qnp.KR...B.." : 1, "board_state_string": appeared_time: int, etc,.}
+    # When a board state has appeared 3 times, remove it from the best_final_move and use the 2nd best one
+    #
 
     chess_board = create_chess_board(variant_name)
     turn_number = 0
