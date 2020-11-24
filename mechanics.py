@@ -69,8 +69,15 @@ def create_chess_board(variant_name):
         chess_board[-2] = ['P' for p in range(5)]
         chess_board[-1] = ['R', 'N', 'Q', 'K', 'N']
 
-    elif variant_name == "THOC":
+    elif variant_name == "THOC 3x4":
         chess_board = [[".", ".", "."] for i in range(4)]
+        chess_board[0] = ['n', 'b', 'r']
+        chess_board[1] = ['p', ".", "."]
+        chess_board[-2] = [".", ".", "P"]
+        chess_board[-1] = ["R", "B", "N"]
+
+    elif variant_name == "THOC 3x5":
+        chess_board = [[".", ".", "."] for i in range(5)]
         chess_board[0] = ['n', 'b', 'r']
         chess_board[1] = ['p', ".", "."]
         chess_board[-2] = [".", ".", "P"]
@@ -82,7 +89,6 @@ def create_chess_board(variant_name):
         chess_board[1] = ['.', "k", "."]
         chess_board[-2] = [".", "K", "."]
         chess_board[-1] = ["N", "Q", "N"]
-
 
     elif variant_name == "Silverman 4x5":
         chess_board = [
@@ -425,12 +431,14 @@ def obtain_piece_value(single_piece, who_is_essential):
     elif (single_piece in ['P', 'p']):
         return 10
 
-def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximizing):
+def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximizing, board_state_archive):
     possible_boards = generate_game_tree(chess_board, current_player)
     best_board = -9999
     second_best = -9999
     third_best = -9999
     best_board_final = None
+    second_best_board_final = None
+    third_best_board_final = None
 
     for each_board in possible_boards:
         if current_player == "White":
@@ -443,14 +451,33 @@ def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximi
             third_best = second_best
             second_best = best_board
             best_board = value
+            if second_best_board_final != None:
+                third_best_board_final = copy.deepcopy(second_best_board_final)
             if best_board_final != None:
                 second_best_board_final = copy.deepcopy(best_board_final)
             best_board_final = each_board
-    #TODO: Connect this with the seen move cache/dict so that AIs use the 2nd best move
-    # when the best move is already seen 3 times
+    best_board_final_str = ''.join(map(str, best_board_final))
+    #print("ROOT STR 1st:", best_board_final_str)
+    if second_best_board_final != None:
+        second_best_board_final_str = ''.join(map(str, second_best_board_final))
+        #print("ROOT STR 2nd:", second_best_board_final_str)
+    if third_best_board_final != None:
+        third_best_board_final_str = ''.join(map(str, third_best_board_final))
+        #print("ROOT STR 3rd:", third_best_board_final_str)
 
-    return best_board_final
-
+    if best_board_final_str in board_state_archive:
+        if board_state_archive[best_board_final_str] >= 3:
+            if type(second_best_board_final) == list:
+                return second_best_board_final
+            else:
+                print("Turtling behavior detected. Compromising~")
+                comprise_with_random_moves = generate_game_tree(chess_board, current_player)
+                compromised_board = random.choice(comprise_with_random_moves)
+                return compromised_board
+        else:
+            return best_board_final
+    else:
+        return best_board_final
 
 def minimax_execution(depth, chess_board, current_player, who_is_essential, is_maximizing):
 
@@ -496,7 +523,7 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
     # probably stored in the form of chess_board_status_str
     # {"...qnp.KR...B.." : 1, "board_state_string": appeared_time: int, etc,.}
     # When a board state has appeared 3 times, remove it from the best_final_move and use the 2nd best one
-    #
+    board_state_archive = dict()
 
     chess_board = create_chess_board(variant_name)
     turn_number = 0
@@ -512,8 +539,18 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
         # If it is an odd number (%2 == 1), it is Black's turn
         if turn_number%2 == 0:
             print("Turn No.", turn_number + 1, "; It is White's turn.")
-            board_after_white_plays = minimax_root(how_deep, chess_board, "White", who_is_essential, True)
+            board_after_white_plays = minimax_root(how_deep, chess_board, "White", who_is_essential, True, board_state_archive)
             chess_board_status_str = ''.join(map(str, board_after_white_plays))
+            print("BORD STR:", chess_board_status_str)
+
+            # Avoid turtling and repetition.
+            if chess_board_status_str in board_state_archive:
+                board_state_archive[chess_board_status_str] += 1
+            else:
+                board_state_archive.update({chess_board_status_str : 1})
+            #TODO: Send this board_state_archive dict into Minimax Root so it can be utilized
+            # to avoid turtling moves there
+
             # Check for victories:
             if who_is_essential == "King":
                 if "k" not in chess_board_status_str:
@@ -540,8 +577,15 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
 
         elif turn_number%2 == 1:
             print("Turn No.", turn_number + 1, "; It is Black's turn.")
-            board_after_black_plays = minimax_root(how_deep, chess_board, "Black", who_is_essential, True)
+            board_after_black_plays = minimax_root(how_deep, chess_board, "Black", who_is_essential, True, board_state_archive)
             chess_board_status_str = ''.join(map(str, board_after_black_plays))
+            print("BORD STR:", chess_board_status_str)
+
+            # Avoid turtling and repetition.
+            if chess_board_status_str in board_state_archive:
+                board_state_archive[chess_board_status_str] += 1
+            else:
+                board_state_archive.update({chess_board_status_str : 1})
 
             if who_is_essential == "King":
                 if "K" not in chess_board_status_str:
