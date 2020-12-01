@@ -99,6 +99,13 @@ def create_chess_board(variant_name):
             ["R", "Q", "K", "R"]
         ]
 
+    elif variant_name == "AltThai":
+        chess_board = [[".", ".", ".", "."] for i in range(8)]
+        chess_board[0] = ['r', 'n', 'q', 'b']
+        chess_board[2] = ['p', 'p', 'p', 'p']
+        chess_board[-3] = ['P', 'P', 'P', 'P']
+        chess_board[-1] = ['B', 'Q', 'N', 'R']
+
     # print("Board type:", variant_name, "\n", *chess_board, sep="\n")
     print("Board type:", variant_name)
 
@@ -414,12 +421,13 @@ def obtain_piece_value(single_piece, who_is_essential):
     # So their values differ
     if (single_piece in ['Q', 'q']):
         if who_is_essential == "Queen":
-            return 5000
+            return 9999
         else:
             return 150
     elif (single_piece in ['K', 'k']):
         if who_is_essential == "King":
-            return 5000
+            #print("PROTECT THE KING!!!")
+            return 9999
         else:
             return 100
     elif (single_piece in ['B', 'b']):
@@ -528,17 +536,17 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
     chess_board = create_chess_board(variant_name)
     turn_number = 0
     #print("The game begins.")
-    #print_board.print_board(chess_board, True)
+    print_board.print_board(chess_board, True)
 
     while turn_number < when_to_call_draw:
         # If the turn number is even ((%2 == 0), it is White's turn
         # If it is an odd number (%2 == 1), it is Black's turn
         if turn_number%2 == 0:
-            #print("Turn No.", turn_number + 1, "; It is White's turn.")
+            print("Turn No.", turn_number + 1, "; It is White's turn.")
             board_after_white_plays = minimax_root(how_deep, chess_board, "White", who_is_essential, True, board_state_archive)
             if board_after_white_plays == "I Submit!":
                 print("White player submits. Black wins.")
-                #print_board.print_board(chess_board, True)
+                print_board.print_board(chess_board, True)
                 return ["Black", chess_board, turn_number]
 
             chess_board_status_str = ''.join(map(str, board_after_white_plays))
@@ -558,7 +566,7 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     print("The Black King is eliminated. The White Player has won.")
                     final_board = board_after_white_plays
                     print("The game is over.")
-                    #print_board.print_board(final_board, True)
+                    print_board.print_board(final_board, True)
                     return ["White", final_board, turn_number]
 
             if who_is_essential == "Queen":
@@ -566,22 +574,22 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     print("The Black Queen is eliminated. The White Player has won.")
                     final_board = board_after_white_plays
                     print("The game is over.")
-                    #print_board.print_board(final_board, True)
+                    print_board.print_board(final_board, True)
                     return ["White", final_board, turn_number]
             if chess_board_status_str.isupper():
                 print("All Black pieces eliminated. The White Player has won.")
                 final_board = board_after_white_plays
                 print("The game is over.")
-                #print_board.print_board(final_board, True)
+                print_board.print_board(final_board, True)
                 return ["White", final_board, turn_number]
             chess_board = board_after_white_plays
 
         elif turn_number%2 == 1:
-            #print("Turn No.", turn_number + 1, "; It is Black's turn.")
+            print("Turn No.", turn_number + 1, "; It is Black's turn.")
             board_after_black_plays = minimax_root(how_deep, chess_board, "Black", who_is_essential, True, board_state_archive)
             if board_after_black_plays == "I Submit!":
                 print("Black player submits. White wins.")
-                #print_board.print_board(chess_board, True)
+                print_board.print_board(chess_board, True)
                 return ["White", chess_board, turn_number]
 
             chess_board_status_str = ''.join(map(str, board_after_black_plays))
@@ -598,7 +606,7 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     print("The White King is eliminated. The Black Player has won.")
                     final_board = board_after_black_plays
                     print("The game is over.")
-                    #print_board.print_board(final_board, True)
+                    print_board.print_board(final_board, True)
                     return ["Black", final_board, turn_number]
 
             if who_is_essential == "Queen":
@@ -606,18 +614,18 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     print("The White Queen is eliminated. The Black Player has won.")
                     final_board = board_after_black_plays
                     print("The game is over.")
-                    #print_board.print_board(final_board, True)
+                    print_board.print_board(final_board, True)
                     return ["Black", final_board, turn_number]
 
             if chess_board_status_str.islower():
                 print("All White pieces eliminated. The Black Player has won.")
                 final_board = board_after_black_plays
                 print("The game is over.")
-                #print_board.print_board(final_board, True)
+                print_board.print_board(final_board, True)
                 return ["Black", final_board, turn_number]
             chess_board = board_after_black_plays
 
-        # print_board.print_board(chess_board, True)
+        print_board.print_board(chess_board, True)
         turn_number += 1
         continue
     print("The game ended in a draw.")
