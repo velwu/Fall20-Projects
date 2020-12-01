@@ -7,6 +7,10 @@ import sys
 import chess.svg
 import mechanics
 
+# My IDE and test environments both use black backgrounds
+# so on GitHub pages, chess icon colors might be flipped
+# for clarification, uppercase means White, and lowercase means Black
+
 def print_board(board_class, is_list_bool):
     uni_pieces = {'R':' ♜ ', 'N':' ♞ ', 'B':' ♝ ', 'Q':' ♛ ', 'K':' ♚ ', 'P':' ♟ ',
                   'r':' ♖ ', 'n':' ♘ ', 'b':' ♗ ', 'q':' ♕ ', 'k':' ♔ ', 'p':' ♙ ', '.':' 口 '}

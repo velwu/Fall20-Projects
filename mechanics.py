@@ -434,11 +434,7 @@ def obtain_piece_value(single_piece, who_is_essential):
 def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximizing, board_state_archive):
     possible_boards = generate_game_tree(chess_board, current_player)
     best_board = -9999
-    second_best = -9999
-    third_best = -9999
-    best_board_final = None
-    second_best_board_final = None
-    third_best_board_final = None
+    current_best_choices = []
 
     for each_board in possible_boards:
         if current_player == "White":
@@ -448,34 +444,44 @@ def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximi
         value = max(best_board, minimax_execution(depth - 1, each_board, next_player, who_is_essential, not is_maximizing))
         # print("Maximizing Value:", value)
         if value > best_board:
-            third_best = second_best
-            second_best = best_board
             best_board = value
-            if second_best_board_final != None:
-                third_best_board_final = copy.deepcopy(second_best_board_final)
-            if best_board_final != None:
-                second_best_board_final = copy.deepcopy(best_board_final)
-            best_board_final = each_board
-    best_board_final_str = ''.join(map(str, best_board_final))
-    #print("ROOT STR 1st:", best_board_final_str)
-    if second_best_board_final != None:
-        second_best_board_final_str = ''.join(map(str, second_best_board_final))
-        #print("ROOT STR 2nd:", second_best_board_final_str)
-    if third_best_board_final != None:
-        third_best_board_final_str = ''.join(map(str, third_best_board_final))
-        #print("ROOT STR 3rd:", third_best_board_final_str)
+            current_best_choices = []
+            current_best_choices.append(each_board)
+        elif value == best_board:
+            current_best_choices.append(each_board)
+    if len(current_best_choices) > 0:
+        best_board_final = random.choice(current_best_choices)
+    else:
+        print("No legal moves left!", current_player, "Player submits!")
+        return "I Submit!"
 
-    if best_board_final_str in board_state_archive:
-        if board_state_archive[best_board_final_str] >= 3:
-            if type(second_best_board_final) == list:
-                return second_best_board_final
+    best_board_final_str = ''.join(map(str, best_board_final))
+
+    if best_board_final_str in board_state_archive and board_state_archive[best_board_final_str] >= 3:
+        repetition_attempts = 0
+        while True:
+            if best_board_final_str in board_state_archive and board_state_archive[best_board_final_str] >= 3:
+                    if repetition_attempts > 13:
+                        print("Too many tries. Compromising~")
+                        compromised_moves = generate_game_tree(chess_board, current_player)
+                        other_best_board_final = random.choice(compromised_moves)
+                        return other_best_board_final
+
+                    print("Repetitive boards detected. Compromising~")
+                    try:
+                        other_best_board_final = random.choice(current_best_choices)
+                    except:
+                    # This exception is triggered when all possible moves are alrdy repeated more than 3 times
+                        compromised_moves = generate_game_tree(chess_board, current_player)
+                        other_best_board_final = random.choice(compromised_moves)
+                        return other_best_board_final
+                    best_board_final = other_best_board_final
+                    best_board_final_str = ''.join(map(str, best_board_final))
+
+                    repetition_attempts += 1
+                    continue
             else:
-                print("Turtling behavior detected. Compromising~")
-                comprise_with_random_moves = generate_game_tree(chess_board, current_player)
-                compromised_board = random.choice(comprise_with_random_moves)
-                return compromised_board
-        else:
-            return best_board_final
+                return best_board_final
     else:
         return best_board_final
 
@@ -519,20 +525,14 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
 
     """
 
-    #TODO: Have a dict space here which serves as a cache of the last 10 or so game states
-    # probably stored in the form of chess_board_status_str
-    # {"...qnp.KR...B.." : 1, "board_state_string": appeared_time: int, etc,.}
-    # When a board state has appeared 3 times, remove it from the best_final_move and use the 2nd best one
+    #TODO: Apply a King check mechanism of some sort
     board_state_archive = dict()
+    print("Seen board states:", board_state_archive)
 
     chess_board = create_chess_board(variant_name)
     turn_number = 0
-    print("The game begins.")
+    #print("The game begins.")
     print_board.print_board(chess_board, True)
-
-
-    # If the game progress to the 1000th turn without either side winning
-    # Then call it a draw
 
     while turn_number < when_to_call_draw:
         # If the turn number is even ((%2 == 0), it is White's turn
@@ -540,6 +540,10 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
         if turn_number%2 == 0:
             print("Turn No.", turn_number + 1, "; It is White's turn.")
             board_after_white_plays = minimax_root(how_deep, chess_board, "White", who_is_essential, True, board_state_archive)
+            if board_after_white_plays == "I Submit!":
+                print("White player submits. Black wins.")
+                return ["Black", chess_board, turn_number]
+
             chess_board_status_str = ''.join(map(str, board_after_white_plays))
             print("BORD STR:", chess_board_status_str)
 
@@ -558,7 +562,7 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     final_board = board_after_white_plays
                     print("The game is over.")
                     print_board.print_board(final_board, True)
-                    return
+                    return ["White", final_board, turn_number]
 
             if who_is_essential == "Queen":
                 if "q" not in chess_board_status_str:
@@ -566,18 +570,22 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     final_board = board_after_white_plays
                     print("The game is over.")
                     print_board.print_board(final_board, True)
-                    return
+                    return ["White", final_board, turn_number]
             if chess_board_status_str.isupper():
                 print("All Black pieces eliminated. The White Player has won.")
                 final_board = board_after_white_plays
                 print("The game is over.")
                 print_board.print_board(final_board, True)
-                return
+                return ["White", final_board, turn_number]
             chess_board = board_after_white_plays
 
         elif turn_number%2 == 1:
             print("Turn No.", turn_number + 1, "; It is Black's turn.")
             board_after_black_plays = minimax_root(how_deep, chess_board, "Black", who_is_essential, True, board_state_archive)
+            if board_after_black_plays == "I Submit!":
+                print("Black player submits. White wins.")
+                return ["White", chess_board, turn_number]
+
             chess_board_status_str = ''.join(map(str, board_after_black_plays))
             print("BORD STR:", chess_board_status_str)
 
@@ -593,7 +601,7 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     final_board = board_after_black_plays
                     print("The game is over.")
                     print_board.print_board(final_board, True)
-                    return
+                    return ["Black", final_board, turn_number]
 
             if who_is_essential == "Queen":
                 if "Q" not in chess_board_status_str:
@@ -601,105 +609,52 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                     final_board = board_after_black_plays
                     print("The game is over.")
                     print_board.print_board(final_board, True)
-                    return
+                    return ["Black", final_board, turn_number]
 
             if chess_board_status_str.islower():
                 print("All White pieces eliminated. The Black Player has won.")
                 final_board = board_after_black_plays
                 print("The game is over.")
                 print_board.print_board(final_board, True)
-                return
+                return ["Black", final_board, turn_number]
             chess_board = board_after_black_plays
 
         print_board.print_board(chess_board, True)
         turn_number += 1
         continue
     print("The game ended in a draw.")
+    return ["Draw", chess_board, turn_number]
     print_board.print_board(chess_board, True)
 
-def play_a_game_dumbly(variant_name:str, who_is_essential:str, when_to_call_draw:int):
-    """
-    variant_name: The name of chessboard variant desired.
-    who_is_essential: If this string specifies a piece (ex: "Queen", or "King"), whoever strikes down that piece first wins;
-    otherwise, this is a game of elimination, in which whoever wipes all enemy pieces win.
-    when_to_call_draw: An integer which specify the maximum number of turns. When the game progresses to this number, call it a draw and end the game
+def play_and_record_games(num_of_games:int, variant_name:str,who_is_essential:str, how_deep:int, when_to_call_draw:int):
 
-    """
+    score_board = {"White": 0, "Black": 0, "Draw": 0,
+                   "Longest Game": 0, "Shortest Game": 0,
+                   "Average Game Length": "Not calculated yet"}
 
-    chess_board = create_chess_board(variant_name)
-    turn_number = 0
-    print("The game begins.")
-    print_board.print_board(chess_board, True)
+    total_turns = 0
 
+    for each_game in range(num_of_games):
+        print("!A new game begins!")
+        each_game_outcome = play_a_game_smartly(variant_name, who_is_essential, how_deep, when_to_call_draw)
+        score_board[each_game_outcome[0]] += 1
+        if each_game_outcome[-1] > score_board["Longest Game"]:
+            score_board["Longest Game"] = each_game_outcome[-1]
 
-    # If the game progress to the 1000th turn without either side winning
-    # Then call it a draw
+        if each_game_outcome[-1] < score_board["Shortest Game"]:
+            score_board["Shortest Game"] = each_game_outcome[-1]
+        elif score_board["Shortest Game"] == 0:
+            score_board["Shortest Game"] = each_game_outcome[-1]
 
-    while turn_number < when_to_call_draw:
-        # If the turn number is even ((%2 == 0), it is White's turn
-        # If it is an odd number (%2 == 1), it is Black's turn
-        if turn_number%2 == 0:
-            print("Turn No.", turn_number + 1, "; It is White's turn.")
-            board_after_white_plays = random.choice(generate_game_tree(chess_board, "White"))
-            chess_board_status_str = ''.join(map(str, board_after_white_plays))
-            # Check for victories:
-            if who_is_essential == "King":
-                if "k" not in chess_board_status_str:
-                    print("The Black King is eliminated. The White Player has won.")
-                    final_board = board_after_white_plays
-                    print("The game is over.")
-                    print_board.print_board(final_board, True)
-                    return
+        total_turns += each_game_outcome[-1]
+        print(score_board)
 
-            if who_is_essential == "Queen":
-                if "q" not in chess_board_status_str:
-                    print("The Black Queen is eliminated. The White Player has won.")
-                    final_board = board_after_white_plays
-                    print("The game is over.")
-                    print_board.print_board(final_board, True)
-                    return
-            if chess_board_status_str.isupper():
-                print("All Black pieces eliminated. The White Player has won.")
-                final_board = board_after_white_plays
-                print("The game is over.")
-                print_board.print_board(final_board, True)
-                return
-            chess_board = board_after_white_plays
+    score_board["Average Game Length"] = (total_turns / num_of_games)
 
-        elif turn_number%2 == 1:
-            print("Turn No.", turn_number + 1, "; It is Black's turn.")
-            board_after_black_plays = random.choice(generate_game_tree(chess_board, "Black"))
-            chess_board_status_str = ''.join(map(str, board_after_black_plays))
+    #print(score_board)
 
-            if who_is_essential == "King":
-                if "K" not in chess_board_status_str:
-                    print("The White King is eliminated. The Black Player has won.")
-                    final_board = board_after_black_plays
-                    print("The game is over.")
-                    print_board.print_board(final_board, True)
-                    return
+    return score_board
 
-            if who_is_essential == "Queen":
-                if "Q" not in chess_board_status_str:
-                    print("The White Queen is eliminated. The Black Player has won.")
-                    final_board = board_after_black_plays
-                    print("The game is over.")
-                    print_board.print_board(final_board, True)
-                    return
-
-            if chess_board_status_str.islower():
-                print("All White pieces eliminated. The Black Player has won.")
-                final_board = board_after_black_plays
-                print("The game is over.")
-                print_board.print_board(final_board, True)
-                return
-            chess_board = board_after_black_plays
-
-        print_board.print_board(chess_board, True)
-        turn_number += 1
-        continue
-    print("The game ended in a draw.")
-    print_board.print_board(chess_board, True)
 
 #TODO: Write a func which detects checks for whether either sides' essential (King in default settings)
 # is under attack and cut out the tree branch if a move cannot remove that threat
@@ -715,7 +670,5 @@ def detect_stalemate(chess_board):
 
 #TODO: Downsize the analysis to probably 3x4, with only some select pieces
 #TODO: Start small. Try some 3*3 boards which are mostly solved (with any piece combinations, perhaps??)
-
-#TODO: Write the analysis
 
 
