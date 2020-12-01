@@ -23,7 +23,7 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
     - **The House of Commoners**: A 3x4 board with only non-royal pieces are present.
 ![Snapshot Image 5](https://github.com/velwu/Fall20-Projects/blob/main/3x4%20THoC.PNG)
     - **Queen's Gauntlet**: A 3x5 board with both sides' Queens being in charge, and their Knights in position to deliver cross shots against the enemy King
-![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensMen.PNG)
+![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensGlt.PNG)
  
 - 3. 4x4 Boards
   - Silverman 4x5
