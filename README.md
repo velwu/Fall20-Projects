@@ -32,12 +32,12 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
   ![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensGlt.PNG)
  
 - 3. 4x? Boards
-  - Silverman 4x5
+  - **Silverman 4x5**
     - While Silverman 4x4 is known to be solved in favor of White player, Silverman recently proposed a 4x5 that is more playable.
     
   ![Snapshot Image 0](https://github.com/velwu/Fall20-Projects/blob/main/Silverman%204x5.PNG)
   
-  - Alternate Thai
+  - **Alternate Thai**
     - Inspired by Thai Chess, also called [Makruk](https://en.wikipedia.org/wiki/Makruk)
     
   ![Snapshot Image Thai](https://github.com/velwu/Fall20-Projects/blob/main/4x8%20AltThai.PNG)
@@ -45,8 +45,8 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
     
 - 4. 5x5 Boards
   - The only variant that is solved in this family is the Gardner minichess (with White player having an obvious advantage). This project will attempt to prove it mathematically and demonstrate it programmatically, while also analyzing the following variants:
-    - Jacobs–Meirovitz
-    - Mallett
+    - **Jacobs–Meirovitz**
+    - **Mallett**
     
 Because Gardner is a solved and is an unbalanced (potentially unfun) game, the inclusion of the other two is important in making this project valuable.
 For now, 3x4 customized boards and Silverman 4x5 (as screenshot below describes) are the main targets of analysis, while the Jacobs–Meirovitz variant is the ultimate goal of this analysis as I find it the most balanced and fun among the 3. It is also, unlike Gardner's, an unsolved game. Mallet is also unsolved though it is argued by some to be unbalanced, thanks to the Bishop/Knight exclusivity on both sides.
