@@ -18,12 +18,12 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
   - Chess variants on a 3×3 board are not clearly defined, so it is not written in stone what pieces are involved or where they each start. These are largely solved games, however, so provide a good place to conduct simpler and quicker analyses.
   - This part will also likely involve some variants I created out of thin air because magic (alright, it's done on my laptop, but you get it).
  
-- 2. 3x4 Boards 
+- 2. 3x? Boards 
   - I came up with these variants, bending the rules a little. The victory is earned not by taking the opponent's King, but by eliminating all his/her pieces.
     - **The House of Commoners**: A 3x4 board with only non-royal pieces are present.
-![Snapshot Image 5](https://github.com/velwu/Fall20-Projects/blob/main/3x4%20THoC.PNG)
-    - **Queen's Gauntlet**: A 3x5 board with both sides' Queens being in charge, and their Knights in position to deliver cross shots against the enemy King
-![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensMen.PNG)
+    ![Snapshot Image 5](https://github.com/velwu/Fall20-Projects/blob/main/3x4%20THoC.PNG)
+    - **Queen's Gauntlet**: A 3x5 board with both sides' Queens being in charge, and their Knights in position to deliver cross shots against the enemy King.
+    ![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensGlt.PNG)
  
 - 3. 4x4 Boards
   - Silverman 4x5
