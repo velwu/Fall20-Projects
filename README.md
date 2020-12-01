@@ -20,26 +20,38 @@ http://kirr.homeunix.org/chess/3x4-chess/#Introduction
  
 - 2. 3x? Boards 
   - I came up with these variants, bending the rules a little. The victory is earned not by taking the opponent's King, but by eliminating all his/her pieces.
-    - **The House of Commoners**: A 3x4 board with only non-royal pieces are present.
-    ![Snapshot Image 5](https://github.com/velwu/Fall20-Projects/blob/main/3x4%20THoC.PNG)
-    - **Queen's Gauntlet**: A 3x5 board with both sides' Queens being in charge, and their Knights in position to deliver cross shots against the enemy King.
-    ![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensGlt.PNG)
+  
+  - **The House of Commoners**: 
+    - A 3x4 or 3x5 board with only non-royal pieces are present.
+    
+  ![Snapshot Image 5](https://github.com/velwu/Fall20-Projects/blob/main/3x4%20THoC.PNG)
+    
+  - **Queen's Gauntlet**: 
+    - A 3x5 board with both players' Queens and their Knights in position to deliver cross shots against the Kings.
+    
+  ![Snapshot Image 4](https://github.com/velwu/Fall20-Projects/blob/main/3x5%20QueensGlt.PNG)
  
-- 3. 4x4 Boards
-  - Silverman 4x5
-    - While Silverman 4x4 is known to be solved in huge favor of White player, 4x5 is a alternative proposed by Silverman that is largely playable and unsolved.
- 
+- 3. 4x? Boards
+  - **Silverman 4x5**
+    - While Silverman 4x4 is known to be solved in favor of White player, Silverman recently proposed a 4x5 that is more playable.
+    
+  ![Snapshot Image 0](https://github.com/velwu/Fall20-Projects/blob/main/Silverman%204x5.PNG)
+  
+  - **Alternate Thai**
+    - Inspired by Thai Chess, also called [Makruk](https://en.wikipedia.org/wiki/Makruk)
+    
+  ![Snapshot Image Thai](https://github.com/velwu/Fall20-Projects/blob/main/4x8%20AltThai.PNG)
+  
+    
 - 4. 5x5 Boards
   - The only variant that is solved in this family is the Gardner minichess (with White player having an obvious advantage). This project will attempt to prove it mathematically and demonstrate it programmatically, while also analyzing the following variants:
-    - Jacobs–Meirovitz
-    - Mallett
+    - **Jacobs–Meirovitz**
+    - **Mallett**
     
 Because Gardner is a solved and is an unbalanced (potentially unfun) game, the inclusion of the other two is important in making this project valuable.
 For now, 3x4 customized boards and Silverman 4x5 (as screenshot below describes) are the main targets of analysis, while the Jacobs–Meirovitz variant is the ultimate goal of this analysis as I find it the most balanced and fun among the 3. It is also, unlike Gardner's, an unsolved game. Mallet is also unsolved though it is argued by some to be unbalanced, thanks to the Bishop/Knight exclusivity on both sides.
 
-![Snapshot Image 0](https://github.com/velwu/Fall20-Projects/blob/main/Silverman%204x5.PNG)
 ![Snapshot Image 1](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Gardner%20variant.PNG)
 ![Snapshot Image 2](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20JM%20variant.PNG)
 ![Snapshot Image 3](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Mallett%20variant.PNG)
-
 
