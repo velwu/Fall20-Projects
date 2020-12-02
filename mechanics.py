@@ -469,11 +469,9 @@ def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximi
         repetition_attempts = 0
         while True:
             if best_board_final_str in board_state_archive and board_state_archive[best_board_final_str] >= 3:
-                    if repetition_attempts > 13:
-                        print("Too many tries. Compromising~")
-                        compromised_moves = generate_game_tree(chess_board, current_player)
-                        other_best_board_final = random.choice(compromised_moves)
-                        return other_best_board_final
+                    if repetition_attempts > len(current_best_choices):
+                        print("Too many tries. Proposing draw~")
+                        return "Lets just be friends~!"
 
                     print("Repetitive boards detected. Compromising~")
 
@@ -549,6 +547,11 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                 print_board.print_board(chess_board, True)
                 return ["Black", chess_board, turn_number]
 
+            if board_after_white_plays == "Lets just be friends~!":
+                print("White player proposes draw.")
+                print_board.print_board(chess_board, True)
+                return ["Draw", chess_board, turn_number]
+
             chess_board_status_str = ''.join(map(str, board_after_white_plays))
             # print("BORD STR:", chess_board_status_str)
 
@@ -591,6 +594,11 @@ def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, wh
                 print("Black player submits. White wins.")
                 print_board.print_board(chess_board, True)
                 return ["White", chess_board, turn_number]
+
+            if board_after_black_plays == "Lets just be friends~!":
+                print("Black player proposes a draw.")
+                print_board.print_board(chess_board, True)
+                return ["Draw", chess_board, turn_number]
 
             chess_board_status_str = ''.join(map(str, board_after_black_plays))
             # print("BORD STR:", chess_board_status_str)
