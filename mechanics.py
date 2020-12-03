@@ -90,6 +90,22 @@ def create_chess_board(variant_name):
         chess_board[-2] = [".", "K", "."]
         chess_board[-1] = ["N", "Q", "N"]
 
+    elif variant_name == "Silverman 4x4":
+        chess_board = [
+            ["r", "q", "k", "r"],
+            ["p", "p", "p", "p"],
+            ["P", "P", "P", "P"],
+            ["R", "Q", "K", "R"]
+        ]
+
+    elif variant_name == "Silverman 4x4 Knightly":
+        chess_board = [
+            ["r", "q", "n", "r"],
+            ["p", "p", "p", "p"],
+            ["P", "P", "P", "P"],
+            ["R", "Q", "N", "R"]
+        ]
+
     elif variant_name == "Silverman 4x5":
         chess_board = [
             ["r", "q", "k", "r"],
@@ -97,6 +113,15 @@ def create_chess_board(variant_name):
             [".", ".", ".", "."],
             ["P", "P", "P", "P"],
             ["R", "Q", "K", "R"]
+        ]
+
+    elif variant_name == "Silverman 4x5 Knightly":
+        chess_board = [
+            ["r", "q", "n", "r"],
+            ["p", "p", "p", "p"],
+            [".", ".", ".", "."],
+            ["P", "P", "P", "P"],
+            ["R", "Q", "N", "R"]
         ]
 
     elif variant_name == "AltThai":
