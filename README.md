@@ -10,9 +10,7 @@ As a cornerstone for myself to build a Python chess AI (probably as an extra-cur
 
 Instead of relying on any mainstream chess libraries out there, **all chess pieces movement mechanisms are written in Python in their originality by myself**. This is an important element to demonstrate my own data structuring capabilities.
 
-## What ths analysis covers:
-Analyses 1 and 2 will both likely reference Kryukov's publication. 
-http://kirr.homeunix.org/chess/3x4-chess/#Introduction
+## What the current program covers:
 
 - 1. 3x3 Boards 
   - Chess variants on a 3×3 board are not clearly defined, so it is not written in stone what pieces are involved or where they each start. These are largely solved games, however, so provide a good place to conduct simpler and quicker analyses.
