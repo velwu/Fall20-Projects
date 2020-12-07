@@ -53,3 +53,18 @@ For now, 3x4 customized boards and Silverman 4x5 (as screenshot below describes)
 ![Snapshot Image 2](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20JM%20variant.PNG)
 ![Snapshot Image 3](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Mallett%20variant.PNG)
 
+
+## Gameplay Snapshots:
+- 1. THOC 3x4 (match just starting out)
+
+![Snapshot Image game_play1](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_THOC_3x4.png)
+
+- 2. THOC 3x5 (match near conclusion)
+
+![Snapshot Image game_play2](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_THOC_3x5.png)
+
+- 3. Alt Thai 4x8 (Black player submits, White player wins)
+
+![Snapshot Image game_play3](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_Thai_4x8.png)
+
+
