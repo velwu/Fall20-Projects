@@ -68,3 +68,15 @@ For now, 3x4 customized boards and Silverman 4x5 (as screenshot below describes)
 ![Snapshot Image game_play3](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_Thai_4x8.png)
 
 
+## Match Results:
+- 1. THOC_3x5
+
+![Snapshot Image results1](https://github.com/velwu/Fall20-Projects/blob/main/match_results_THOC_3x5.png)
+
+- 2. Queen's Gauntlet 3x5
+
+![Snapshot Image results2](https://github.com/velwu/Fall20-Projects/blob/main/match_results_QueensGlt_3x5.png)
+
+- 3. Alt Thai 4x8 
+
+![Snapshot Image results2](https://github.com/velwu/Fall20-Projects/blob/main/match_results_AltThai_4x8.png)
