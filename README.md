@@ -10,9 +10,7 @@ As a cornerstone for myself to build a Python chess AI (probably as an extra-cur
 
 Instead of relying on any mainstream chess libraries out there, **all chess pieces movement mechanisms are written in Python in their originality by myself**. This is an important element to demonstrate my own data structuring capabilities.
 
-## What ths analysis covers:
-Analyses 1 and 2 will both likely reference Kryukov's publication. 
-http://kirr.homeunix.org/chess/3x4-chess/#Introduction
+## What the current program covers:
 
 - 1. 3x3 Boards 
   - Chess variants on a 3×3 board are not clearly defined, so it is not written in stone what pieces are involved or where they each start. These are largely solved games, however, so provide a good place to conduct simpler and quicker analyses.
@@ -55,3 +53,30 @@ For now, 3x4 customized boards and Silverman 4x5 (as screenshot below describes)
 ![Snapshot Image 2](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20JM%20variant.PNG)
 ![Snapshot Image 3](https://github.com/velwu/Fall20-Projects/blob/main/5x5%20Mallett%20variant.PNG)
 
+
+## Gameplay Snapshots:
+- 1. THOC 3x4 (match just starting out)
+
+![Snapshot Image game_play1](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_THOC_3x4.png)
+
+- 2. THOC 3x5 (match near conclusion)
+
+![Snapshot Image game_play2](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_THOC_3x5.png)
+
+- 3. Alt Thai 4x8 (Black player submits, White player wins)
+
+![Snapshot Image game_play3](https://github.com/velwu/Fall20-Projects/blob/main/gameplay_snapshot_Thai_4x8.png)
+
+
+## Match Results:
+- 1. THOC_3x5
+
+![Snapshot Image results1](https://github.com/velwu/Fall20-Projects/blob/main/match_results_THOC_3x5.png)
+
+- 2. Queen's Gauntlet 3x5
+
+![Snapshot Image results2](https://github.com/velwu/Fall20-Projects/blob/main/match_results_QueensGlt_3x5.png)
+
+- 3. Alt Thai 4x8 
+
+![Snapshot Image results2](https://github.com/velwu/Fall20-Projects/blob/main/match_results_AltThai_4x8.png)
