@@ -281,7 +281,7 @@ def get_queen_moves(current_pos, chess_board):
     #print("All possible moves with this Queen:", solution_moves)
     return solution_moves
 
-def get_king_moves(current_pos, chess_board):
+def get_king_moves(current_pos, chess_board, who_is_essential):
     solution_moves = []
     this_king = get_piece_at_position(current_pos, chess_board)
     # Look for potential moves in all 8 possible moves
@@ -312,7 +312,45 @@ def get_king_moves(current_pos, chess_board):
             else:
                 continue
     #print("All possible moves with this King:", solution_moves)
-    return solution_moves
+    # print("ALL MOVES:", solution_moves)
+    if solution_moves != [] and who_is_essential == "King":
+        # Create a list of possible boards to check whether King comes under attack after moving
+        safer_solution_moves = list()
+        all_possible_new_boards = list()
+        for each_movement in solution_moves:
+            one_new_chess_board = copy.deepcopy(chess_board)
+            try_new_chess_board = move_piece_by_set_pos(current_pos, each_movement,
+                                                        one_new_chess_board, this_king[0])
+            if this_king[0] == "K": # If the King about to move is White
+                all_possible_new_boards = generate_possible_moves(try_new_chess_board, "Black", "Check if under attack")
+
+            elif this_king[0] == "k": # If the King about to move is Black
+                all_possible_new_boards = generate_possible_moves(try_new_chess_board, "White", "Check if under attack")
+
+            all_pos_new_boards_strings = []
+            for ele in all_possible_new_boards:
+                ele_string = ''.join(map(str, ele))
+                all_pos_new_boards_strings.append(ele_string)
+
+            if any(this_king[0] not in ele_str for ele_str in all_pos_new_boards_strings):
+                #print("King IN DANGER!!", this_king[1])
+                continue
+            #print("King is SAFE!!", this_king)
+            safer_solution_moves.append(each_movement)
+            """
+            for ele in all_possible_new_boards:
+                ele_string = ''.join(map(str, ele))
+                if this_king[0] not in ele_string:
+                    print("King IN DANGER!!", this_king[1], ele)
+                    movement_is_safe = False
+                    break
+            """
+                # chess_board_status_str = ''.join(map(str, board_after_white_plays))
+                #print("King IN DANGER!!", this_king[1], ele)
+        return safer_solution_moves
+
+    else:
+        return solution_moves
 
 def get_pawn_moves(current_pos, chess_board):
     solution_moves = []
@@ -351,7 +389,7 @@ def get_pawn_moves(current_pos, chess_board):
     #print("All possible moves with this Pawn:", solution_moves)
     return solution_moves
 
-def generate_game_tree(chess_board, current_player):
+def generate_possible_moves(chess_board, current_player, who_is_essential):
     # By itself, this function generates all possible moves from the current board state
 
     all_new_boards = list()
@@ -381,7 +419,7 @@ def generate_game_tree(chess_board, current_player):
                 possible_moves = get_queen_moves(location_to_test, chess_board)
 
             elif (each_square_val == king_to_move):
-                possible_moves = get_king_moves(location_to_test, chess_board)
+                possible_moves = get_king_moves(location_to_test, chess_board, who_is_essential)
 
             elif (each_square_val == bishop_to_move):
                 possible_moves = get_bishop_moves(location_to_test, chess_board)
@@ -403,7 +441,20 @@ def generate_game_tree(chess_board, current_player):
                 all_new_boards.append(move_piece_by_set_pos(location_to_test, each_possible_move,
                                       new_chess_board, each_square_val))
 
-    return all_new_boards
+    if who_is_essential == "King":
+        king_check_all_new_boards = list()
+        for each_board in all_new_boards:
+            each_board_string = ''.join(map(str, each_board))
+            if current_player == "White" and "K" not in each_board_string:
+                continue
+            elif current_player == "Black" and "k" not in each_board_string:
+                continue
+            else:
+                king_check_all_new_boards.append(each_board)
+        return king_check_all_new_boards
+
+    else:
+        return all_new_boards
 
 def check_for_winner(chess_board, white_essential_piece, black_essential_piece):
     # Usually white_essential_piece == "White King (k)" and black_essential_piece == "Black King (K)"
@@ -465,7 +516,7 @@ def obtain_piece_value(single_piece, who_is_essential):
         return 10
 
 def minimax_root(depth, chess_board, current_player, who_is_essential, is_maximizing, board_state_archive):
-    possible_boards = generate_game_tree(chess_board, current_player)
+    possible_boards = generate_possible_moves(chess_board, current_player, who_is_essential)
     best_board = -9999
     current_best_choices = []
 
@@ -517,7 +568,7 @@ def minimax_execution(depth, chess_board, current_player, who_is_essential, is_m
     if depth == 0:
         #return -minimax_evaluation(chess_board, current_player, who_is_essential)
         return minimax_evaluation(chess_board, current_player, who_is_essential)
-    possible_boards = generate_game_tree(chess_board, current_player)
+    possible_boards = generate_possible_moves(chess_board, current_player, who_is_essential)
 
     # print("Depth: ", (4 - depth + 1), " ", len(list(possible_boards)), " Possible boards")
 
