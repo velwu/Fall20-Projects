@@ -10,10 +10,11 @@ As a cornerstone for myself to build a Python chess AI (probably as an extra-cur
 
 Instead of relying on any mainstream chess libraries out there, **all chess pieces movement mechanisms are written in Python in their originality by myself**. This is an important element to demonstrate my own data structuring capabilities.
 
+
 ## Running the program
+1. Run the mechanics.play_a_game_smartly() cells in the test_run_jupyter.ipynb to see the bots dueling each other.
 
-Run the test_run_jupyter.ipynb to see the computers dueling each other.
-
+2. Run the last cell in the test_run_jupyter.ipynb to play aginst the bot yourself.
 
 ## What the current program covers:
 

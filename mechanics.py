@@ -1,6 +1,5 @@
 import argparse
 import json
-import chess
 import print_board
 import numpy as np
 import copy
@@ -592,6 +591,126 @@ def minimax_execution(depth, chess_board, current_player, who_is_essential, is_m
             best_board = min(best_board, minimax_execution(depth - 1, each_board, next_player, who_is_essential, not is_maximizing))
 
         return best_board
+
+def play_a_game_human(variant_name:str, who_is_essential:str, how_deep:int, when_to_call_draw:int):
+    """
+    variant_name: The name of chessboard variant desired.
+    who_is_essential: If this string specifies a piece (ex: "Queen", or "King"), whoever strikes down that piece first wins;
+    otherwise, this is a game of elimination, in which whoever wipes all enemy pieces win.
+    how_deep: An integer which decides how deep AIs should look ahead when playing the game using Minimax algorithms
+    when_to_call_draw: An integer which specify the maximum number of turns. When the game progresses to this number, call it a draw and end the game
+
+    """
+    #TODO: Streamline the piece selection and block invalid moves
+    board_state_archive = dict()
+    chess_board = create_chess_board(variant_name)
+    turn_number = 0
+
+    print_board.print_board(chess_board, True)
+
+    while turn_number < when_to_call_draw:
+        if turn_number%2 == 0:
+            print("Turn No.", turn_number + 1, "; It is YOUR turn.")
+            move_made = input("Please enter your move")
+            print("Your move:", move_made[0] + move_made[1], move_made[2] + move_made[3])
+            move_origin = (int(move_made[0]), int(move_made[1]))
+            move_destination = (int(move_made[2]), int(move_made[3]))
+            piece_to_move = get_piece_at_position(move_origin, chess_board)
+            board_after_white_plays = move_piece_by_set_pos(move_origin, move_destination, chess_board, piece_to_move[0])
+            
+            #TODO: This blocking mechanism is bugged and won't budge.
+            #if board_after_white_plays not in generate_possible_moves(chess_board, "White", who_is_essential):
+            #    print("INVALID MOVE, my peasant friend. TRY AGAIN")
+            #    continue
+            # print_board.print_board(board_after_white_plays, True)
+
+            chess_board_status_str = ''.join(map(str, board_after_white_plays))
+            # print("BORD STR:", chess_board_status_str)
+
+            # Avoid turtling and repetition.
+            if chess_board_status_str in board_state_archive:
+                board_state_archive[chess_board_status_str] += 1
+            else:
+                board_state_archive.update({chess_board_status_str : 1})
+            
+            # Check for victories:
+            if who_is_essential == "King":
+                if "k" not in chess_board_status_str:
+                    print("The Black King is eliminated. You have won.")
+                    final_board = board_after_white_plays
+                    print("The game is over.")
+                    print_board.print_board(final_board, True)
+                    return ["White", final_board, turn_number]
+
+            if who_is_essential == "Queen":
+                if "q" not in chess_board_status_str:
+                    print("The Black Queen is eliminated. You have won.")
+                    final_board = board_after_white_plays
+                    print("The game is over.")
+                    print_board.print_board(final_board, True)
+                    return ["White", final_board, turn_number]
+            if chess_board_status_str.isupper():
+                print("All Black pieces eliminated. You have won.")
+                final_board = board_after_white_plays
+                print("The game is over.")
+                print_board.print_board(final_board, True)
+                return ["White", final_board, turn_number]
+            chess_board = board_after_white_plays
+        
+        # board_after_white_plays
+        elif turn_number%2 == 1:
+            print("Turn No.", turn_number + 1, "; It is the Bot's turn.")
+            board_after_black_plays = minimax_root(how_deep, chess_board, "Black", who_is_essential, True, board_state_archive)
+            if board_after_black_plays == "I Submit!":
+                print("The Bot submits. You win.")
+                print_board.print_board(chess_board, True)
+                return ["White", chess_board, turn_number]
+
+            if board_after_black_plays == "Lets just be friends~!":
+                print("The Bot proposes a draw.")
+                print_board.print_board(chess_board, True)
+                return ["Draw", chess_board, turn_number]
+
+            chess_board_status_str = ''.join(map(str, board_after_black_plays))
+            # print("BORD STR:", chess_board_status_str)
+
+            # Avoid turtling and repetition.
+            if chess_board_status_str in board_state_archive:
+                board_state_archive[chess_board_status_str] += 1
+            else:
+                board_state_archive.update({chess_board_status_str : 1})
+
+            if who_is_essential == "King":
+                if "K" not in chess_board_status_str:
+                    print("The White King is eliminated. The Bot has won.")
+                    final_board = board_after_black_plays
+                    print("The game is over.")
+                    print_board.print_board(final_board, True)
+                    return ["Black", final_board, turn_number]
+
+            if who_is_essential == "Queen":
+                if "Q" not in chess_board_status_str:
+                    print("The White Queen is eliminated. The Bot has won.")
+                    final_board = board_after_black_plays
+                    print("The game is over.")
+                    print_board.print_board(final_board, True)
+                    return ["Black", final_board, turn_number]
+
+            if chess_board_status_str.islower():
+                print("All White pieces eliminated. The Bot has won.")
+                final_board = board_after_black_plays
+                print("The game is over.")
+                print_board.print_board(final_board, True)
+                return ["Black", final_board, turn_number]
+            chess_board = board_after_black_plays
+
+        print_board.print_board(chess_board, True)
+        turn_number += 1
+        continue
+    print("The game ended in a draw.")
+    #(chess_board, True)
+    return ["Draw", chess_board, turn_number]
+
 
 def play_a_game_smartly(variant_name:str, who_is_essential:str, how_deep:int, when_to_call_draw:int):
     """
